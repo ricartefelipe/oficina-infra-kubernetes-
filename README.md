@@ -1,36 +1,37 @@
-# oficina-infra-kubernetes
-Infraestrutura como código (**Terraform**) para **Kubernetes** (Tech Challenge Fase 3 — SOAT).
-## Propósito
-- Provisionar cluster **Kubernetes** (ex.: **Kind** para laboratório local; na nuvem: **EKS** ou equivalente conforme evolução da equipa).
-- Preparar base para **Ingress**, métricas e integração com API Gateway / load balancer.
-## Stack
-- Terraform >= 1.5
-- Provider **Kind** (Docker) para ambiente local documentado no enunciário
-## Pré-requisitos
-- [Terraform](https://www.terraform.io/)
-- [Docker](https://www.docker.com/) (para Kind)
-- [Kind](https://kind.sigs.k8s.io/) (instalado pelo provider ou host)
-## Execução local
+# Kubernetes local (Kind) via Terraform
+
+Cumpre o enunciado da Fase 2 (**cluster Kubernetes local ou cloud**) com **Kind** (Kubernetes in Docker), reproduzivel por **Terraform** na maquina do desenvolvedor.
+
+## Requisitos
+
+- [Docker](https://docs.docker.com/get-docker/) em execucao
+- [Terraform](https://developer.hashicorp.com/terraform/install) `>= 1.5.0`
+
+## Uso
+
 ```bash
+cd infra/kind
 terraform init
 terraform plan
 terraform apply
 ```
-Ajustar `variables.tf` / `terraform.tfvars` conforme o repositório.
-## CI
-- `terraform fmt -check`, `init -backend=false`, `validate` em PR.
-- `apply` apenas em pipeline controlada (hml/prd) com credenciais.
-## Diagrama (repositório)
-```text
-[Terraform] -> [Cluster K8s]
-                  |
-                  v
-            [Ingress / Services]
-                  ^
-                  |
-            [oficina-app - outro repo]
+
+Apos o `apply`, configure o kubectl (exemplo - ajuste ao output real):
+
+```bash
+terraform output -raw kubeconfig > "$HOME/.kube/oficina-kind-config"
+export KUBECONFIG="$HOME/.kube/oficina-kind-config"
+kubectl cluster-info
 ```
-## Relação com a app
-- Manifestos da aplicação (Deployment, Service, HPA) podem viver no repositório **`oficina-app`** ou ser referenciados aqui — alinhar com a equipa.
-## Convite
-Adicionar **`soat-architecture`** com leitura (portal SOAT).
+
+Em seguida siga [`../../k8s/README.md`](../../k8s/README.md) para aplicar os manifestos da aplicacao (ConfigMap, Secret com JDBC, Deployment, Service, HPA). A imagem da app pode ser construida localmente (`docker build`) e carregada no Kind com `kind load docker-image ... --name <nome-do-cluster>`.
+
+## Destruir
+
+```bash
+terraform destroy
+```
+
+## CI
+
+O workflow [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) executa `terraform fmt`, `init -backend=false` e `validate` nesta pasta (sem criar cluster; sem Docker no runner para este passo).
