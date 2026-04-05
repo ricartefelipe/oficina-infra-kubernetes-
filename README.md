@@ -10,7 +10,6 @@ Cumpre o enunciado da Fase 2 (**cluster Kubernetes local ou cloud**) com **Kind*
 ## Uso
 
 ```bash
-cd infra/kind
 terraform init
 terraform plan
 terraform apply
@@ -24,7 +23,7 @@ export KUBECONFIG="$HOME/.kube/oficina-kind-config"
 kubectl cluster-info
 ```
 
-Em seguida siga [`../../k8s/README.md`](../../k8s/README.md) para aplicar os manifestos da aplicacao (ConfigMap, Secret com JDBC, Deployment, Service, HPA). A imagem da app pode ser construida localmente (`docker build`) e carregada no Kind com `kind load docker-image ... --name <nome-do-cluster>`.
+Em seguida aplique os manifestos da aplicacao no repositorio **oficina-app** ou **oficina-springboot-mvp** (pasta `k8s/`). A imagem da app pode ser construida localmente (`docker build`) e carregada no Kind com `kind load docker-image ... --name <nome-do-cluster>`.
 
 ## Destruir
 
@@ -34,4 +33,4 @@ terraform destroy
 
 ## CI
 
-O workflow [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) executa `terraform fmt`, `init -backend=false` e `validate` nesta pasta (sem criar cluster; sem Docker no runner para este passo).
+O workflow [`.github/workflows/terraform-validate.yml`](.github/workflows/terraform-validate.yml) executa `terraform fmt`, `init -backend=false` e `validate` na raiz deste repositorio (sem criar cluster; sem Docker no runner para este passo).
