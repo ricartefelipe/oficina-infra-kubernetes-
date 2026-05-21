@@ -1,7 +1,7 @@
 ﻿# Repositorio Kubernetes (Fase 3)
 
-Este repositorio contem o Terraform do cluster **Kind** (laboratorio local). Para EKS ou outro cluster gerido na nuvem, adicionar modulos neste repo e alinhar CI/CD com o ambiente.
+Terraform **Kind** (cluster local, custo zero). Porta do gateway no host: **8088** (mapeada para Traefik no cluster).
 
-Origem: stack equivalente a `infra/kind` do monorepo `oficina-springboot-mvp`.
+Deploy completo da aplicacao: repositorio **oficina-app**, script `./scripts/fase3/deploy-local-kind.sh`.
 
 Convidado de leitura: **soat-architecture** (conforme enunciado).

@@ -1,0 +1,6 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.kubeconfig
+oficina-local-config
