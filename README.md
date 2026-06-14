@@ -1,5 +1,7 @@
 # Kubernetes local (Kind) via Terraform
 
+> **Fase 3 (entrega):** cluster **EKS** na AWS — ver [`aws-eks/`](aws-eks/) e [`README-FASE3.md`](README-FASE3.md).
+
 Cumpre o enunciado da Fase 2 (**cluster Kubernetes local ou cloud**) com **Kind** (Kubernetes in Docker), reproduzivel por **Terraform** na maquina do desenvolvedor.
 
 ## Requisitos
